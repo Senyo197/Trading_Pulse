@@ -1,11 +1,5 @@
 from django.db import models
 
-class Currency(models.Model):
-    """
-    Model representing a currency with its code.
-    """
-    code = models.CharField(max_length=3, unique=True)
-
 class EconomicEvent(models.Model):
     """
     Model representing an economic event.
@@ -20,33 +14,19 @@ class EconomicEvent(models.Model):
         ('M', 'Moderate Impact'),
         ('H', 'High Impact'),
     )
-    currency = models.ForeignKey(Currency, on_delete=models.CASCADE)
+    currency = models.CharField(max_length=3, unique=True)
     impact_level = models.CharField(
         max_length=1,
         choices=IMPACT_CHOICES,
-        help_text="The impact level of the economic event."
-    )
-    release_date = models.DateTimeField(help_text="The release date of the economic event.")
-    event_name = models.CharField(
-        max_length=100,
-        help_text="The name of the economic event."
-    )
-    forecast = models.CharField(
-        max_length=20,
-        blank=True,
         null=True,
-        help_text="The forecasted value of the economic event."
+        blank=True
     )
-    actual = models.CharField(
-        max_length=20,
-        blank=True,
-        null=True,
-        help_text="The actual value of the economic event."
-    )
-    outcome = models.CharField(
-        max_length=10,
-        help_text="The outcome of the economic event (positive, negative, neutral, unknown)."
-    )
+    release_date = models.DateTimeField()
+    event_name = models.CharField(max_length=100)
+    forecast = models.CharField(max_length=20, blank=True, null=True)
+    previous = models.CharField(max_length=20, blank=True, null=True)
+    actual = models.CharField(max_length=20, blank=True, null=True)
+    outcome = models.CharField(max_length=10, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         """
@@ -62,10 +42,7 @@ class EconomicEvent(models.Model):
             else:
                 self.outcome = 'neutral'
         else:
-            self.outcome = 'unknown'
-        
-        if not self.impact_level:
-            self.impact_level = None
+            self.outcome = None
         
         super().save(*args, **kwargs)
 
@@ -74,3 +51,42 @@ class EconomicEvent(models.Model):
         Return a string representation of the economic event.
         """
         return f"{self.event_name} - {self.release_date}"
+
+"""
+Retrieve all EconomicEvent instances for a specific currency and its imapct level
+"""
+aud_low_impact_events = EconomicEvent.objects.filter(currency='AUD', impact_level='L', outcome__in=['positive', 'negative', 'neutral'])
+aud_moderate_impact_events = EconomicEvent.objects.filter(currency='AUD', impact_level='M', outcome__in=['positive', 'negative', 'neutral'])
+aud_high_impact_events = EconomicEvent.objects.filter(currency='AUD', impact_level='H', outcome__in=['positive', 'negative', 'neutral'])
+
+cad_low_impact_events = EconomicEvent.objects.filter(currency='CAD', impact_level='L', outcome__in=['positive', 'negative', 'neutral'])
+cad_moderate_impact_events = EconomicEvent.objects.filter(currency='CAD', impact_level='M', outcome__in=['positive', 'negative', 'neutral'])
+cad_high_impact_events = EconomicEvent.objects.filter(currency='CAD', impact_level='H', outcome__in=['positive', 'negative', 'neutral'])
+
+chf_low_impact_events = EconomicEvent.objects.filter(currency='CHF', impact_level='L', outcome__in=['positive', 'negative', 'neutral'])
+chf_moderate_impact_events = EconomicEvent.objects.filter(currency='CHF', impact_level='M', outcome__in=['positive', 'negative', 'neutral'])
+chf_high_impact_events = EconomicEvent.objects.filter(currency='CHF', impact_level='H', outcome__in=['positive', 'negative', 'neutral'])
+
+cny_low_impact_events = EconomicEvent.objects.filter(currency='CNY', impact_level='L', outcome__in=['positive', 'negative', 'neutral'])
+cny_moderate_impact_events = EconomicEvent.objects.filter(currency='CNY', impact_level='M', outcome__in=['positive', 'negative', 'neutral'])
+cny_high_impact_events = EconomicEvent.objects.filter(currency='CNY', impact_level='H', outcome__in=['positive', 'negative', 'neutral'])
+
+eur_low_impact_events = EconomicEvent.objects.filter(currency='EUR', impact_level='L', outcome__in=['positive', 'negative', 'neutral'])
+eur_moderate_impact_events = EconomicEvent.objects.filter(currency='EUR', impact_level='M', outcome__in=['positive', 'negative', 'neutral'])
+eur_high_impact_events = EconomicEvent.objects.filter(currency='EUR', impact_level='H', outcome__in=['positive', 'negative', 'neutral'])
+
+gbp_low_impact_events = EconomicEvent.objects.filter(currency='GBP', impact_level='L', outcome__in=['positive', 'negative', 'neutral'])
+gbp_moderate_impact_events = EconomicEvent.objects.filter(currency='GBP', impact_level='M', outcome__in=['positive', 'negative', 'neutral'])
+gbp_high_impact_events = EconomicEvent.objects.filter(currency='GBP', impact_level='H', outcome__in=['positive', 'negative', 'neutral'])
+
+jpy_low_impact_events = EconomicEvent.objects.filter(currency='JPY', impact_level='L', outcome__in=['positive', 'negative', 'neutral'])
+jpy_moderate_impact_events = EconomicEvent.objects.filter(currency='JPY', impact_level='M', outcome__in=['positive', 'negative', 'neutral'])
+jpy_high_impact_events = EconomicEvent.objects.filter(currency='JPY', impact_level='H', outcome__in=['positive', 'negative', 'neutral'])
+
+nzd_low_impact_events = EconomicEvent.objects.filter(currency='NZD', impact_level='L', outcome__in=['positive', 'negative', 'neutral'])
+nzd_moderate_impact_events = EconomicEvent.objects.filter(currency='NZD', impact_level='M', outcome__in=['positive', 'negative', 'neutral'])
+nzd_high_impact_events = EconomicEvent.objects.filter(currency='NZD', impact_level='H', outcome__in=['positive', 'negative', 'neutral'])
+
+usd_low_impact_events = EconomicEvent.objects.filter(currency='USD', impact_level='L', outcome__in=['positive', 'negative', 'neutral'])
+usd_moderate_impact_events = EconomicEvent.objects.filter(currency='USD', impact_level='M', outcome__in=['positive', 'negative', 'neutral'])
+usd_high_impact_events = EconomicEvent.objects.filter(currency='USD', impact_level='H', outcome__in=['positive', 'negative', 'neutral'])
