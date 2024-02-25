@@ -4,10 +4,12 @@ from .models import EconomicEvent
 class EconomicEventSerializer(serializers.ModelSerializer):
     """
     Serializer for the EconomicEvent model.
+
+    Serializes EconomicEvent instances into JSON format for API responses.
     """
     class Meta:
         model = EconomicEvent
-        fields = '__all__'  # You can specify the fields you want to include if you don't want all fields
+        fields = '__all__'
 
     def to_representation(self, instance):
         """
@@ -17,3 +19,17 @@ class EconomicEventSerializer(serializers.ModelSerializer):
         """
         data = super().to_representation(instance)
         return data
+
+
+"""
+class EconomicEventListView(generics.ListAPIView):
+    
+    API endpoint for listing EconomicEvent instances.
+
+    Retrieves a list of EconomicEvent instances and serializes them using EconomicEventSerializer.
+    
+    queryset = EconomicEvent.objects.all()
+    serializer_class = EconomicEventSerializer
+
+    
+"""

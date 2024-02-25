@@ -1,44 +1,28 @@
-from django.db.models import Count
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from .models import EconomicEvent
+from .serializers import EconomicEventSerializer
 
-def count_event_outcomes(start_date, end_date, currency_code):
+class EconomicEventListView(APIView):
     """
-    Count the number of economic event outcomes (positive, negative, neutral)
-    within a specified date range and for a given currency code.
+    API endpoint for retrieving filtered EconomicEvent instances.
 
-    Args:
-        start_date (datetime): The start date of the range.
-        end_date (datetime): The end date of the range.
-        currency_code (str): The code of the currency to filter events.
-
-    Returns:
-        dict: A dictionary containing counts for positive, negative, and neutral outcomes.
-              Example: {'positive_count': 10, 'negative_count': 5, 'neutral_count': 3}
+    Accepts GET requests with query parameters for currency and impact level
+    to filter EconomicEvent instances and returns them as JSON.
     """
-    # Query the EconomicEvent model to count positive, negative, and neutral outcomes
-    event_counts = EconomicEvent.objects.filter(
-        release_date__range=(start_date, end_date),
-        currency__code=currency_code,
-    ).values('impact_level').annotate(
-        positive_count=Count('id', filter=models.Q(outcome='positive')),
-        negative_count=Count('id', filter=models.Q(outcome='negative')),
-        neutral_count=Count('id', filter=models.Q(outcome='neutral')),
-    )
+    def get(self, request, format=None):
+        currency = request.query_params.get('currency')
+        impact_level = request.query_params.get('impact_level')
 
-    # Initialize counts for each impact level
-    positive_counts = {'L': 0, 'M': 0, 'H': 0}
-    negative_counts = {'L': 0, 'M': 0, 'H': 0}
-    neutral_counts = {'L': 0, 'M': 0, 'H': 0}
+        if currency and impact_level:
+            events = EconomicEvent.objects.filter(currency=currency, impact_level=impact_level, outcome__in=['positive', 'negative', 'neutral'])
+        elif currency:
+            events = EconomicEvent.objects.filter(currency=currency, outcome__in=['positive', 'negative', 'neutral'])
+        elif impact_level:
+            events = EconomicEvent.objects.filter(impact_level=impact_level, outcome__in=['positive', 'negative', 'neutral'])
+        else:
+            events = EconomicEvent.objects.all()
 
-    # Extract counts for each impact level
-    for event_count in event_counts:
-        impact_level = event_count['impact_level']
-        positive_counts[impact_level] = event_count.get('positive_count', 0)
-        negative_counts[impact_level] = event_count.get('negative_count', 0)
-        neutral_counts[impact_level] = event_count.get('neutral_count', 0)
-
-    return {
-        'positive_counts': positive_counts,
-        'negative_counts': negative_counts,
-        'neutral_counts': neutral_counts,
-    }
+        serializer = EconomicEventSerializer(events, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
