@@ -1,11 +1,10 @@
-from django.test import TestCase
+import unittest
 from django.utils import timezone
-from django.db.models import Count, Q
 from .models import Currency, EconomicEvent
 from .views import count_event_outcomes
 from .serializers import EconomicEventSerializer
 
-class EconomicEventTestCase(TestCase):
+class EconomicEventTestCase(unittest.TestCase):
     """
     Test case for the EconomicEvent model and related functions.
     """
@@ -63,7 +62,7 @@ class EconomicEventTestCase(TestCase):
         self.assertEqual(empty_counts['neutral_counts']['M'], 0)
         self.assertEqual(empty_counts['neutral_counts']['H'], 0)
 
-class EconomicEventSerializerTestCase(TestCase):
+class EconomicEventSerializerTestCase(unittest.TestCase):
     """
     Test case for the EconomicEventSerializer serializer.
     """

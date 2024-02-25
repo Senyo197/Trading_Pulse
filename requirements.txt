@@ -1,4 +1,0 @@
-sqlparse
-django
-djangorestframework
-mysqlclient
