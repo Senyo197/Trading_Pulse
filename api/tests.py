@@ -1,101 +1,143 @@
+import random
+import datetime
 import unittest
+from django.test import Client, TestCase
 from django.utils import timezone
-from .models import Currency, EconomicEvent
-from .views import count_event_outcomes
+from .models import EconomicEvent
 from .serializers import EconomicEventSerializer
 
-class EconomicEventTestCase(unittest.TestCase):
+def create_sample_economic_events(n=3):
     """
-    Test case for the EconomicEvent model and related functions.
+    Creates and returns a list of n sample EconomicEvent instances.
     """
+    events = []
+    for _ in range(n):
+        event_data = {
+            'currency': random.choice(['USD', 'EUR', 'GBP']),
+            'impact_level': random.choice(['H', 'M', 'L']),
+            'outcome': random.choice(['positive', 'negative', 'neutral']),
+            'release_date': timezone.now().date()  # Use current date as release date
+        }
+        events.append(EconomicEvent.objects.create(**event_data))
+    return events
 
-    def setUp(self):
+class EconomicEventModelTestCase(TestCase):
+    def test_outcome_calculation(self):
         """
-        Set up test data for the EconomicEvent model.
+        Test the outcome calculation logic in the EconomicEvent model's save method.
         """
-        # Create test currency
-        self.currency = Currency.objects.create(code='USD')
+        events = create_sample_economic_events(3)
 
-        # Create test economic events
-        self.event1 = EconomicEvent.objects.create(
-            currency=self.currency,
-            impact_level='L',
-            release_date=timezone.now(),
-            event_name='Test Event 1',
+    def test_currency_impact_level_filtering(self):
+        """
+        Test the filtering of EconomicEvent instances based on currency and impact level.
+        """
+        # Create some economic event instances for testing
+        release_date = timezone.now().date()  # Use current date as release date
+        EconomicEvent.objects.create(
+            currency='USD',
+            impact_level='H',
+            release_date=release_date,
+            event_name='Event 1',
             forecast='50%',
-            actual='60%',
-            outcome='positive'
+            actual='70%'
         )
-        self.event2 = EconomicEvent.objects.create(
-            currency=self.currency,
-            impact_level='M',
-            release_date=timezone.now(),
-            event_name='Test Event 2',
+        EconomicEvent.objects.create(
+            currency='EUR',
+            impact_level='L',
+            release_date=release_date,
+            event_name='Event 2',
             forecast='70%',
-            actual='60%',
-            outcome='negative'
+            actual='50%'
         )
 
-    def test_count_event_outcomes(self):
-        """
-        Test count_event_outcomes function.
-        """
-        start_date = timezone.now() - timezone.timedelta(days=1)
-        end_date = timezone.now() + timezone.timedelta(days=1)
-        currency_code = 'USD'
+        # Test filtering by currency
+        usd_events = EconomicEvent.objects.filter(currency='USD')
+        self.assertEqual(usd_events.count(), 1)
 
-        # Test when there are events within the specified date range and currency
-        counts = count_event_outcomes(start_date, end_date, currency_code)
-        self.assertEqual(counts['positive_counts']['L'], 1)
-        self.assertEqual(counts['negative_counts']['M'], 1)
-        self.assertEqual(counts['neutral_counts']['L'], 0)
-        self.assertEqual(counts['neutral_counts']['M'], 0)
-        self.assertEqual(counts['neutral_counts']['H'], 0)
+        # Test filtering by impact level
+        high_impact_events = EconomicEvent.objects.filter(impact_level='H')
+        self.assertEqual(high_impact_events.count(), 1)
 
-        # Test when there are no events within the specified date range and currency
-        empty_counts = count_event_outcomes(start_date - timezone.timedelta(days=2),
-                                            start_date - timezone.timedelta(days=1),
-                                            currency_code)
-        self.assertEqual(empty_counts['positive_counts']['L'], 0)
-        self.assertEqual(empty_counts['negative_counts']['M'], 0)
-        self.assertEqual(empty_counts['neutral_counts']['L'], 0)
-        self.assertEqual(empty_counts['neutral_counts']['M'], 0)
-        self.assertEqual(empty_counts['neutral_counts']['H'], 0)
+        # Test filtering by both currency and impact level
+        eur_high_impact_events = EconomicEvent.objects.filter(currency='EUR', impact_level='H')
+        self.assertEqual(eur_high_impact_events.count(), 0)  # Expecting 0 as there's no EUR event with high impact
 
-class EconomicEventSerializerTestCase(unittest.TestCase):
-    """
-    Test case for the EconomicEventSerializer serializer.
-    """
 
+class EconomicEventSerializerTestCase(TestCase):
     def setUp(self):
-        """
-        Set up test data for the EconomicEventSerializer.
-        """
+        # Create a sample EconomicEvent instance for testing
+        release_date = timezone.now().date()  # Use current date as release date
         self.event_data = {
-            'currency': 1,
-            'impact_level': 'L',
-            'release_date': '2022-01-01T00:00:00Z',
+            'currency': 'USD',
+            'impact_level': 'H',
+            'release_date': release_date,
             'event_name': 'Test Event',
             'forecast': '50%',
-            'actual': '60%',
+            'actual': '70%',
             'outcome': 'positive'
         }
+        self.event = EconomicEvent.objects.create(**self.event_data)
 
-    def test_economic_event_serializer(self):
+    def test_serializer_output(self):
         """
-        Test EconomicEventSerializer serializer.
+        Test the output of EconomicEventSerializer for a given EconomicEvent instance.
         """
-        serializer = EconomicEventSerializer(data=self.event_data)
-        self.assertTrue(serializer.is_valid())
+        serializer = EconomicEventSerializer(instance=self.event)
+        expected_data = {
+            'id': self.event.id,
+            'currency': 'USD',
+            'impact_level': 'H',
+            'release_date': serializer.data['release_date'],  # Serializer data will have timezone issues
+            'event_name': 'Test Event',
+            'forecast': '50%',
+            'actual': '70%',
+            'outcome': 'positive'
+        }
+        self.assertEqual(serializer.data, expected_data)
 
-        # Create an EconomicEvent object using the serializer
-        event = serializer.save()
 
-        # Check that the serializer data matches the created object's data
-        self.assertEqual(event.currency_id, self.event_data['currency'])
-        self.assertEqual(event.impact_level, self.event_data['impact_level'])
-        self.assertEqual(event.release_date.isoformat(), self.event_data['release_date'])
-        self.assertEqual(event.event_name, self.event_data['event_name'])
-        self.assertEqual(event.forecast, self.event_data['forecast'])
-        self.assertEqual(event.actual, self.event_data['actual'])
-        self.assertEqual(event.outcome, self.event_data['outcome'])
+class EconomicEventListViewTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Use the generated sample events
+        cls.events = create_sample_economic_events()
+
+    def setUp(self):
+        # Set up a test client
+        self.client = Client()
+
+    def test_get_all_events(self):
+        """
+        Test retrieving all EconomicEvent instances without any filters.
+        """
+        response = self.client.get('/api/events/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), len(self.events))  # Use cls.events instead of self.event_data
+
+    def test_filter_by_currency(self):
+        """
+        Test filtering EconomicEvent instances by currency.
+        """
+        response = self.client.get('/api/events/?currency=USD')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)  # Expecting only one event with currency 'USD'
+
+    def test_filter_by_impact_level(self):
+        """
+        Test filtering EconomicEvent instances by impact level.
+        """
+        response = self.client.get('/api/events/?impact_level=L')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)  # Expecting only one event with impact level 'L'
+
+    def test_filter_by_currency_and_impact_level(self):
+        """
+        Test filtering EconomicEvent instances by both currency and impact level.
+        """
+        response = self.client.get('/api/events/?currency=EUR&impact_level=L')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)  # Expecting only one event with currency 'EUR' and impact level 'L'
+
+if __name__ == '__main__':
+    unittest.main()

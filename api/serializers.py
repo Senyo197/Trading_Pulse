@@ -7,6 +7,8 @@ class EconomicEventSerializer(serializers.ModelSerializer):
 
     Serializes EconomicEvent instances into JSON format for API responses.
     """
+    release_date = serializers.DateField(format="%Y-%m-%d")
+
     class Meta:
         model = EconomicEvent
         fields = '__all__'
