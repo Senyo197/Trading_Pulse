@@ -1,8 +1,6 @@
 from django.urls import path
 from . import views
 
-"""
 urlpatterns = [
-    path("", views.index, name="index"),
+    path('economic-events/', views.EconomicEventChartView.as_view(), name='economic_events_chart'),
 ]
-"""

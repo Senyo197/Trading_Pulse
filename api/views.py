@@ -26,3 +26,18 @@ class EconomicEventListView(APIView):
 
         serializer = EconomicEventSerializer(events, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+"""
+class EconomicEventListView(generics.ListAPIView):
+    
+    API endpoint for listing EconomicEvent instances.
+
+    Retrieves a list of EconomicEvent instances and serializes them using EconomicEventSerializer.
+    
+    queryset = EconomicEvent.objects.all()
+    serializer_class = EconomicEventSerializer
+
+    
+"""
