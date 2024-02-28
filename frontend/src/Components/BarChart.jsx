@@ -1,6 +1,8 @@
-import React, { useEffect, useRef } from "react";
-import { Bar } from "react-chartjs-2";
-import Chart from "chart.js/auto"; // Import chart.js
+import React, { useEffect, useRef, useState } from "react";
+import Chart from "chart.js/auto";
+import { CategoryScale } from "chart.js"; // Import CategoryScale from chart.js
+
+Chart.register(CategoryScale);
 
 const chartData = {
   labels: ["January", "February", "March", "April", "May", "June"],
@@ -16,46 +18,66 @@ const chartData = {
 
 const MyBarChart = () => {
   const chartRef = useRef(null);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    if (chartRef && chartRef.current) {
-      // Get the chart instance
-      const chartInstance = chartRef.current.chartInstance;
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
 
-      // Check if the chart is already created
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    let chartInstance = null;
+
+    if (chartRef.current) {
+      const canvas = chartRef.current;
+
       if (chartInstance) {
-        // Destroy the existing chart instance if it exists
         chartInstance.destroy();
       }
 
-      // Create a new chart instance
-      new Chart(chartRef.current, {
+      chartInstance = new Chart(canvas, {
         type: "bar",
         data: chartData,
         options: {
-          // Add chart options here
           scales: {
             x: {
-              // Use the registered CategoryScale from chart.js
               type: "category",
             },
           },
+          plugins: {
+            legend: {
+              display: true,
+              position: "top",
+            },
+          },
+          responsive: true,
+          elements: {
+            bar: {
+              borderWidth: 2,
+            },
+          },
+          barPercentage: 0.5,
         },
       });
     }
-  }, []); // Empty dependency array to run only once on component mount
+
+    return () => {
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+    };
+  }, [screenWidth]);
 
   return (
-    <div>
-      <Bar
-        ref={chartRef}
-        data={chartData}
-        options={
-          {
-            /* Add options here */
-          }
-        }
-      />
+    <div style={{ width: "100%", maxWidth: "900px", margin: "0 auto" }}>
+      <canvas ref={chartRef} />
     </div>
   );
 };
