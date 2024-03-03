@@ -1,22 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
-import { CategoryScale } from "chart.js"; // Import CategoryScale from chart.js
+import { CategoryScale } from "chart.js";
 
 Chart.register(CategoryScale);
 
-const chartData = {
-  labels: ["January", "February", "March", "April", "May", "June"],
-  datasets: [
-    {
-      label: "My Sales",
-      data: [65, 59, 80, 81, 56, 55],
-      backgroundColor: "rgba(255, 99, 132, 0.2)",
-      borderColor: "rgba(255, 99, 132, 1)",
-    },
-  ],
-};
-
-const MyBarChart = () => {
+const MyBarChart = ({ chartData }) => {
   const chartRef = useRef(null);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
@@ -73,7 +61,7 @@ const MyBarChart = () => {
         chartInstance.destroy();
       }
     };
-  }, [screenWidth]);
+  }, [screenWidth, chartData]);
 
   return (
     <div style={{ width: "100%", maxWidth: "900px", margin: "0 auto" }}>

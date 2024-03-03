@@ -12,18 +12,14 @@ class EconomicEventListView(APIView):
     to filter EconomicEvent instances and returns them as JSON.
     """
     def get(self, request, format=None):
+        # Retrieve query parameters
         currency = request.query_params.get('currency')
         impact_level = request.query_params.get('impact_level')
 
-        if currency and impact_level:
-            events = EconomicEvent.objects.filter(currency=currency, impact_level=impact_level, outcome__in=['positive', 'negative', 'neutral'])
-        elif currency:
-            events = EconomicEvent.objects.filter(currency=currency, outcome__in=['positive', 'negative', 'neutral'])
-        elif impact_level:
-            events = EconomicEvent.objects.filter(impact_level=impact_level, outcome__in=['positive', 'negative', 'neutral'])
-        else:
-            events = EconomicEvent.objects.all()
+        # Filter events based on provided parameters using the model's filter_events method
+        events = EconomicEvent.filter_events(currency, impact_level)
 
+        # Serialize and return the filtered events
         serializer = EconomicEventSerializer(events, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

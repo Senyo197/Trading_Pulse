@@ -1,10 +1,10 @@
 import React from "react";
-import BarChart from "./BarChart";
+import BarChartsContainer from "./BarChartsContainer";
 
 const Content = () => {
   return (
     <div>
-      <BarChart />
+      <BarChartsContainer />
     </div>
   );
 };
