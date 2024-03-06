@@ -4,7 +4,7 @@ import { CategoryScale } from "chart.js";
 
 Chart.register(CategoryScale);
 
-const MyBarChart = ({ chartData }) => {
+const BarChart = ({ chartData }) => {
   const chartRef = useRef(null);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
@@ -70,4 +70,4 @@ const MyBarChart = ({ chartData }) => {
   );
 };
 
-export default MyBarChart;
+export default BarChart;
