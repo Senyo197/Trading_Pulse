@@ -1,9 +1,7 @@
-// Your React.js component
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const EconomicEvents = () => {
+const Consu = () => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -35,4 +33,4 @@ const EconomicEvents = () => {
   );
 };
 
-export default EconomicEvents;
+export default Consu;

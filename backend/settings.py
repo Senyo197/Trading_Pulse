@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'api',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +63,11 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    #'http://127.0.0.1:3030',
+    #'yoursite.com'
+]
 
 ROOT_URLCONF = 'backend.urls'
 
