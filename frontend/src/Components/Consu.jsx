@@ -7,7 +7,7 @@ const Consu = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/economic-events/", {
+        const response = await axios.get("http://127.0.0.1:8000/api/economic-events/", {
           params: {
             currency: "USD",
             impact_level: "H",
@@ -19,7 +19,7 @@ const Consu = () => {
       }
     };
     fetchData();
-  }, []);
+  }, []); // empty dependency array means this effect runs only once after the initial render
 
   return (
     <div>
@@ -34,3 +34,4 @@ const Consu = () => {
 };
 
 export default Consu;
+

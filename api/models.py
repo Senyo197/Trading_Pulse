@@ -94,7 +94,7 @@ class EconomicEvent(models.Model):
                         self.outcome = 'neutral'
             else:
                 self.outcome = None
-    
+
         super().save(*args, **kwargs)
 
 
