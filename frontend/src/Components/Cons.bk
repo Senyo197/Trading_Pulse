@@ -59,32 +59,20 @@ const Consu = () => {
     datasets: [
       {
         label: 'Positive',
-        data: [
-          countOutcomes(lowEvents).positiveCount,
-          countOutcomes(moderateEvents).positiveCount,
-          countOutcomes(highEvents).positiveCount
-        ],
-        backgroundColor: 'rgba(0, 168, 243)',
+        data: [countOutcomes(lowEvents).positiveCount, countOutcomes(moderateEvents).positiveCount, countOutcomes(highEvents).positiveCount],
+        backgroundColor: 'rgba(0, 0, 255, 0.4)',
         borderWidth: 1
       },
       {
         label: 'Neutral',
-        data: [
-          countOutcomes(lowEvents).neutralCount,
-          countOutcomes(moderateEvents).neutralCount,
-          countOutcomes(highEvents).neutralCount
-        ],
-        backgroundColor: 'rgba(88, 88, 88)',
+        data: [countOutcomes(lowEvents).neutralCount, countOutcomes(moderateEvents).neutralCount, countOutcomes(highEvents).neutralCount],
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
         borderWidth: 1
       },
       {
         label: 'Negative',
-        data: [
-          countOutcomes(lowEvents).negativeCount,
-          countOutcomes(moderateEvents).negativeCount,
-          countOutcomes(lowEvents).negativeCount
-        ],
-        backgroundColor: 'rgba(236, 28, 36)',
+        data: [countOutcomes(lowEvents).negativeCount, countOutcomes(moderateEvents).negativeCount, countOutcomes(lowEvents).negativeCount],
+        backgroundColor: 'rgba(255, 0, 0, 0.4)',
         borderWidth: 1
       }
     ]
