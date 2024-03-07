@@ -43,39 +43,36 @@ const Consu = () => {
     eventsData.forEach(data => {
       if (data.outcome === 'positive') {
         positiveCount++;
+      } else if (data.outcome === 'neutral') {
+        neutralCount++;
       } else if (data.outcome === 'negative') {
         negativeCount++;
-      } else {
-        neutralCount++;
       }
     });
 
-    return { positiveCount, negativeCount, neutralCount };
+    return { positiveCount, neutralCount, negativeCount };
   };
 
   // Prepare data for the bar chart
   const chartData = {
-    labels: ['Positive', 'Negative', 'Neutral'],
+    labels: ['Low', 'Moderate', 'High'],
     datasets: [
       {
-        label: 'Low Impact',
-        data: [countOutcomes(lowEvents).positiveCount, countOutcomes(lowEvents).negativeCount, countOutcomes(lowEvents).neutralCount],
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
+        label: 'Positive',
+        data: [countOutcomes(lowEvents).positiveCount, countOutcomes(moderateEvents).positiveCount, countOutcomes(highEvents).positiveCount],
+        backgroundColor: 'rgba(0, 0, 255, 0.4)',
         borderWidth: 1
       },
       {
-        label: 'Moderate Impact',
-        data: [countOutcomes(moderateEvents).positiveCount, countOutcomes(moderateEvents).negativeCount, countOutcomes(moderateEvents).neutralCount],
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
+        label: 'Neutral',
+        data: [countOutcomes(lowEvents).neutralCount, countOutcomes(moderateEvents).neutralCount, countOutcomes(highEvents).neutralCount],
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
         borderWidth: 1
       },
       {
-        label: 'High Impact',
-        data: [countOutcomes(highEvents).positiveCount, countOutcomes(highEvents).negativeCount, countOutcomes(highEvents).neutralCount],
-        backgroundColor: 'rgba(255, 206, 86, 0.2)',
-        borderColor: 'rgba(255, 206, 86, 1)',
+        label: 'Negative',
+        data: [countOutcomes(lowEvents).negativeCount, countOutcomes(moderateEvents).negativeCount, countOutcomes(lowEvents).negativeCount],
+        backgroundColor: 'rgba(255, 0, 0, 0.4)',
         borderWidth: 1
       }
     ]
