@@ -1,10 +1,10 @@
 import React from "react";
-import Consu from "./Consu";
+import USDChart from "./USDChart";
 
 const Content = () => {
   return (
     <div>
-      <Consu />
+      <USDChart />
     </div>
   );
 };
