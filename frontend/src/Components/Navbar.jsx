@@ -14,7 +14,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="md:hidden bg-gray-600 h-16 overflow-y-auto">
+    <nav className="md:hidden bg-black h-16 overflow-y-auto">
       <div className="flex justify-between">
         <img
           src={logo}

@@ -17,19 +17,31 @@ const ToggleCustomDate = ({ handleSearch }) => {
   };
 
   return (
-    <div>
-      <label>
-        Start Date:
-        <input type="date" value={startDate} onChange={handleStartDateChange} />
+    <div className={"flex items-center mb-4"}>
+      <label className="mr-4 text-sm text-black">
+        <span className="mr-2 text-sm">Start Date:</span>
+        <input
+          type="date"
+          value={startDate}
+          onChange={handleStartDateChange}
+          className="border rounded px-2 py-1"
+        />
       </label>
-      <label>
-        End Date:
-        <input type="date" value={endDate} onChange={handleEndDateChange} />
+      <label className="mr-4 text-sm text-black">
+        <span className="mr-2 text-sm">End Date:</span>
+        <input
+          type="date"
+          value={endDate}
+          onChange={handleEndDateChange}
+          className="border rounded solid px-2 py-1"
+        />
       </label>
-      <button onClick={handleSearchClick}>Search</button>
+      <button onClick={handleSearchClick} className="bg-black text-white px-2 rounded">
+        Search
+      </button>
     </div>
+
   );
 };
 
 export default ToggleCustomDate;
-

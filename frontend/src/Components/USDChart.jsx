@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BarChart from "./BarChart";
 import ToggleCustomDate from "./ToggleCustomDate";
+import ToggleLastWeek from "./ToggleLastWeek";
+import ToggleThisMonth from "./ToggleThisMonth";
+import ToggleLastMonth from "./ToggleLastMonth";
+import ToggleThisYear from "./ToggleThisYear";
+import ToggleLastYear from "./ToggleLastYear";
+
 
 const USDChart = () => {
   const [lowEvents, setLowEvents] = useState([]);
@@ -40,8 +46,8 @@ const USDChart = () => {
 
   const countOutcomes = (eventsData) => {
     let positiveCount = 0;
-    let negativeCount = 0;
     let neutralCount = 0;
+    let negativeCount = 0;
 
     eventsData.forEach(data => {
       if (data.outcome === 'positive') {
@@ -58,7 +64,7 @@ const USDChart = () => {
 
   // Prepare data for the bar chart
   const chartData = {
-    labels: ['Low', 'Moderate', 'High'],
+    labels: ['Low Events', 'Moderate Events', 'High Events'],
     datasets: [
       {
         label: 'Positive',
@@ -87,7 +93,7 @@ const USDChart = () => {
         data: [
           countOutcomes(lowEvents).negativeCount,
           countOutcomes(moderateEvents).negativeCount,
-          countOutcomes(lowEvents).negativeCount
+          countOutcomes(highEvents).negativeCount
         ],
         backgroundColor: 'rgba(236, 28, 36, 0.8)',
         borderColor: 'rgba(236, 28, 36, 1)',
@@ -102,12 +108,16 @@ const USDChart = () => {
 
   return (
     <div>
-      <h1>Economic Events</h1>
+      <h1 className=" text-xl mb-4">USD Economic Events Since 2007</h1>
       <ToggleCustomDate handleSearch={handleSearch} />
+      <ToggleLastWeek handleSearch={handleSearch} />
+      <ToggleThisMonth handleSearch={handleSearch} />
+      <ToggleLastMonth handleSearch={handleSearch} />
+      <ToggleThisYear handleSearch={handleSearch} />
+      <ToggleLastYear handleSearch={handleSearch} />
       <BarChart chartData={chartData} />
     </div>
   );
 };
 
 export default USDChart;
-

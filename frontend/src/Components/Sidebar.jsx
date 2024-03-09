@@ -3,7 +3,7 @@ import logo from "@Images/eagle-logo.png";
 
 const Sidebar = () => {
   return (
-    <nav className="bg-gray-600 text-white flex-col hidden md:flex w-24">
+    <nav className="bg-black text-white flex-col hidden md:flex w-24">
       <div>
         <img
           src={logo}
