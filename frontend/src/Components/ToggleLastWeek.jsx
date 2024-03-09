@@ -28,6 +28,7 @@ const ToggleLastWeek = ({ handleSearch }) => {
             <label className="mr-4 text-sm text-black">
                 <input
                     type="checkbox"
+                    id="toggleLastWeek"
                     checked={checked}
                     onChange={handleToggleChange}
                     className="mr-2"

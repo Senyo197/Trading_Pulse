@@ -7,11 +7,16 @@ const ToggleThisMonth = ({ handleSearch }) => {
         setChecked(e.target.checked);
         if (e.target.checked) {
             const currentDate = new Date();
-            const firstDayOfMonth = new Date(currentDate.getFullYear(),
-                currentDate.getMonth(), 1).toISOString().split('T')[0];
-            const lastDayOfPreviousWeek = new Date(currentDate.getFullYear(),
-                currentDate.getMonth(), currentDate.getDate() - currentDate.
-                    getDay()).toISOString().split('T')[0];
+            const firstDayOfMonth = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                1
+            ).toISOString().split('T')[0];
+            const lastDayOfPreviousWeek = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                currentDate.getDate() - currentDate.getDay()
+            ).toISOString().split('T')[0];
             handleSearch(firstDayOfMonth, lastDayOfPreviousWeek);
         } else {
             handleSearch("", "");
@@ -23,6 +28,7 @@ const ToggleThisMonth = ({ handleSearch }) => {
             <label className="mr-4 text-sm text-black">
                 <input
                     type="checkbox"
+                    id="toggleThisMonth"
                     checked={checked}
                     onChange={handleToggleChange}
                     className="mr-2"

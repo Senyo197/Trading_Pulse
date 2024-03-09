@@ -22,6 +22,7 @@ const ToggleCustomDate = ({ handleSearch }) => {
         <span className="mr-2 text-sm">Start Date:</span>
         <input
           type="date"
+          id="startDate"
           value={startDate}
           onChange={handleStartDateChange}
           className="border rounded px-2 py-1"
@@ -31,6 +32,7 @@ const ToggleCustomDate = ({ handleSearch }) => {
         <span className="mr-2 text-sm">End Date:</span>
         <input
           type="date"
+          id="endDate"
           value={endDate}
           onChange={handleEndDateChange}
           className="border rounded solid px-2 py-1"
@@ -40,7 +42,6 @@ const ToggleCustomDate = ({ handleSearch }) => {
         Search
       </button>
     </div>
-
   );
 };
 
