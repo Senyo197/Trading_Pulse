@@ -10,17 +10,13 @@ export default function App() {
   return (
     <Router>
       <Layout>
-        {/* Rendering AUDChart and USDChart components */}
-        <AUDChart />
-        <USDChart />
-        {/* End of rendering AUDChart and USDChart components */}
-        <Routes>
-          {/* Remove the existing routes for AUDChart and USDChart */}
-          {/* <Route exact path="/" element={<AUDChart />} />
-          <Route exact path="/" element={<USDChart />} /> */}
-          {/* End of removing existing routes */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="flex">
+          <Routes>
+            <Route exact path="/aud" element={<AUDChart />} />
+            <Route exact path="/usd" element={<USDChart />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
       </Layout>
     </Router>
   );

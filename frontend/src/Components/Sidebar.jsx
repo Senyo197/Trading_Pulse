@@ -1,25 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "@Images/eagle-logo.png";
-import USDChart from "./USDChart";
-import AUDChart from "./AUDChart";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
+  const [activeChart, setActiveChart] = useState("");
+
+  const handleLogoClick = () => {
+    setActiveChart(""); // Clear the active icon when the logo is clicked
+  };
+
+  const handleSetActive = (chart) => {
+    setActiveChart(chart);
+  };
+
   return (
     <nav className="bg-black text-white flex flex-col h-screen w-24">
-      <div className="mt-2 mb-6">
-        <img
-          src={logo}
-          alt="logo"
-          className="w-16 h-16 ml-2 filter brightness-0 invert"
-        />
+      <div>
+        <Link to="/" onClick={handleLogoClick}>
+          <img
+            src={logo}
+            alt="logo"
+            className="w-16 h-16 ml-2 mb-24 filter brightness-0 invert"
+          />
+        </Link>
       </div>
-      <div className="sidebar-item flex flex-col">
-        <h2 className="mb-2">USD Chart</h2>
-        <USDChart />
-      </div>
-      <div className="sidebar-item flex flex-col mt-4">
-        <h2 className="mb-2">AUD Chart</h2>
-        <AUDChart />
+      <div className="flex flex-col h-full justify-normal items-center">
+        <Link
+          to="/usd"
+          className={`sidebar-item mb-8 ${activeChart === "usd" ? "active" : ""}`}
+          onClick={() => handleSetActive("usd")}
+        >
+          USD
+        </Link>
+        <Link
+          to="/aud"
+          className={`sidebar-item mb-8 ${activeChart === "aud" ? "active" : ""}`}
+          onClick={() => handleSetActive("aud")}
+        >
+          AUD
+        </Link>
       </div>
     </nav>
   );
