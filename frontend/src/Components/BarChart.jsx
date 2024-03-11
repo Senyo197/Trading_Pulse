@@ -37,7 +37,15 @@ const BarChart = ({ chartData }) => {
           scales: {
             x: {
               type: "category",
+              ticks: {
+                color: 'black'
+              },
             },
+            y: {
+              ticks: {
+                color: 'black'
+              },
+            }
           },
           plugins: {
             legend: {

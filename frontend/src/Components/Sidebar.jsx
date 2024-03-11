@@ -14,7 +14,7 @@ const Sidebar = () => {
   };
 
   return (
-    <nav className="bg-black text-white flex flex-col h-screen w-24">
+    <nav className="bg-black text-white w-24 flex-col hidden md:flex">
       <div>
         <Link to="/" onClick={handleLogoClick}>
           <img

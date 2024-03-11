@@ -1,35 +1,45 @@
 import React, { useState } from "react";
-import { Menu as MenuIcon } from "@mui/icons-material"; // Import Material-UI icons
 import logo from "@Images/eagle-logo.png";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
-  const [isNavbarVisible, setIsNavbarVisible] = useState(false);
 
-  const toggleNavbar = () => {
-    setIsNavbarVisible(!isNavbarVisible);
+  const [activeChart, setActiveChart] = useState("");
+
+  const handleLogoClick = () => {
+    setActiveChart(""); // Clear the active icon when the logo is clicked
   };
 
+  const handleSetActive = (chart) => {
+    setActiveChart(chart);
+  };
+
+
   return (
-    <nav className="md:flex md:justify-between md:items-center md:h-16 md:overflow-y-auto bg-black h-16 overflow-y-auto">
+    <nav className="md:hidden h-16 bg-black sticky left-0 w-screen">
       <div className="flex justify-between items-center">
         <img
           src={logo}
           alt="Logo"
           className="ml-4 my-2 h-12 w-12 filter brightness-0 invert"
         />
-        <button
-          onClick={toggleNavbar}
-          className="md:hidden py-4 px-4 text-white"
-          aria-label="Toggle Navbar"
-        >
-          <MenuIcon className="text-xl" />
-        </button>
       </div>
-      {isNavbarVisible && (
-        <div className="md:flex md:items-center">
-          {/* Add your navigation links here */}
-        </div>
-      )}
+      <div className="">
+        <Link
+          to="/usd"
+          className={` ${activeChart === "usd" ? "active" : ""}`}
+          onClick={() => handleSetActive("usd")}
+        >
+          USD
+        </Link>
+        <Link
+          to="/aud"
+          className={` ${activeChart === "aud" ? "active" : ""}`}
+          onClick={() => handleSetActive("aud")}
+        >
+          AUD
+        </Link>
+      </div>
     </nav>
   );
 }
