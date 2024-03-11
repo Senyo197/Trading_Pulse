@@ -20,24 +20,73 @@ const Sidebar = () => {
           <img
             src={logo}
             alt="logo"
-            className="w-16 h-16 ml-2 mb-24 filter brightness-0 invert"
+            className="w-16 h-16 ml-2 mb-20 filter brightness-0 invert"
           />
         </Link>
       </div>
       <div className="flex flex-col h-full justify-normal items-center">
         <Link
-          to="/usd"
-          className={`sidebar-item mb-8 ${activeChart === "usd" ? "active" : ""}`}
+          to="/"
+          className={`sidebar-item mb-4 rounded-sm ${activeChart === "usd" ? "active" : ""}`}
           onClick={() => handleSetActive("usd")}
         >
           USD
         </Link>
         <Link
           to="/aud"
-          className={`sidebar-item mb-8 ${activeChart === "aud" ? "active" : ""}`}
+          className={`sidebar-item mb-4 rounded-sm ${activeChart === "aud" ? "active" : ""}`}
           onClick={() => handleSetActive("aud")}
         >
           AUD
+        </Link>
+        <Link
+          to="/cad"
+          className={`sidebar-item mb-4 rounded-sm ${activeChart === "cad" ? "active" : ""}`}
+          onClick={() => handleSetActive("cad")}
+        >
+          CAD
+        </Link>
+        <Link
+          to="/chf"
+          className={`sidebar-item mb-4 rounded-sm ${activeChart === "chf" ? "active" : ""}`}
+          onClick={() => handleSetActive("chf")}
+        >
+          CHF
+        </Link>
+        <Link
+          to="/cny"
+          className={`sidebar-item mb-4 rounded-sm ${activeChart === "cny" ? "active" : ""}`}
+          onClick={() => handleSetActive("cny")}
+        >
+          CNY
+        </Link>
+        <Link
+          to="/eur"
+          className={`sidebar-item mb-4 rounded-sm ${activeChart === "eur" ? "active" : ""}`}
+          onClick={() => handleSetActive("eur")}
+        >
+          EUR
+        </Link>
+        <Link
+          to="/gbp"
+          className={`sidebar-item mb-4 rounded-sm ${activeChart === "gbp" ? "active" : ""}`}
+          onClick={() => handleSetActive("gbp")}
+        >
+          GBP
+        </Link>
+        <Link
+          to="/jpy"
+          className={`sidebar-item mb-4 rounded-sm ${activeChart === "jpy" ? "active" : ""}`}
+          onClick={() => handleSetActive("jpy")}
+        >
+          JPY
+        </Link>
+        <Link
+          to="/nzd"
+          className={`sidebar-item mb-4 rounded-sm ${activeChart === "nzd" ? "active" : ""}`}
+          onClick={() => handleSetActive("nzd")}
+        >
+          NZD
         </Link>
       </div>
     </nav>
